@@ -15,6 +15,7 @@ struct Country {
     let alpha3Code: String
     let capital: String
     let region: String
+    let nativeName: String
 }
 
 extension Country: Codable {
@@ -31,6 +32,7 @@ extension Country: ImmutableMappable {
         alpha3Code = try map.value("alpha3Code")
         capital = try map.value("capital")
         region = try map.value("region")
+        nativeName = try map.value("nativeName")
     }
 }
 

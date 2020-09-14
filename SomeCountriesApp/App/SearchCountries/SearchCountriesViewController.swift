@@ -66,8 +66,9 @@ class SearchCountriesViewController: UIViewController {
             .disposed(by: disposeBag)
         
         tableView.rx
-            .modelSelected(Country.self).subscribe(onNext: { country in
-                print("Country selected: \(country.name) (code: \(country.alpha3Code))")
+            .modelSelected(Country.self).subscribe(onNext: { [weak self] country in
+                guard let self = self else { return }
+                self.performSegue(withIdentifier: "ShowCountryDetailsSegue", sender: country)
             })
             .disposed(by: disposeBag)
         
@@ -112,6 +113,18 @@ class SearchCountriesViewController: UIViewController {
         alert.addAction(action)
         present(alert, animated: true)
     }
+    
+    
+    // MARK: - Navigation
+
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let detailsVC = segue.destination as? CountryDetailsViewController {
+            if let country = sender as? Country {
+                detailsVC.selectedCountry = country
+            }
+        }
+    }
+    
 }
 
 extension SearchCountriesViewController: UIScrollViewDelegate {
